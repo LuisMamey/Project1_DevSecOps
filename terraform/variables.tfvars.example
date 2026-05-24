@@ -1,0 +1,3 @@
+table_name = "notes"
+project_name = "project1"
+region = "us-east-1"
