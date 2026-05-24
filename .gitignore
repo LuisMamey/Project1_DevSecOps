@@ -1,0 +1,15 @@
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+
+# Lambda zips (generados por Terraform)
+**/*.zip
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
