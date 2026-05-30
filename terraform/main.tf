@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.10"
+
   backend "s3" {
     bucket         = "project1-terraform-state-delvalle"
     key            = "terraform.tfstate"
