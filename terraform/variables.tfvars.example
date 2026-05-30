@@ -1,3 +1,5 @@
-table_name = "notes"
+company      = "jocalev"
 project_name = "project1"
-region = "us-east-1"
+service      = "notes"
+environment  = "dev"
+region       = "us-east-1"
