@@ -35,13 +35,6 @@ def lambda_handler(event, context):
     scan_kwargs = {'Limit': limit}
 
     if last_key:
-        try:
-            check = table.get_item(Key={'id': last_key})
-        except ClientError as e:
-            logger.error(json.dumps({'action': 'getall_validate_key', 'error': str(e), 'request_id': request_id}))
-            return build_response(500, {'message': 'Internal server error'}, request_id)
-        if not check.get('Item'):
-            return build_response(400, {'message': 'Invalid last_key'}, request_id)
         scan_kwargs['ExclusiveStartKey'] = {'id': last_key}
 
     try:
