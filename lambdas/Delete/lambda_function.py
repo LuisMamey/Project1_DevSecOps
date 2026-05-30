@@ -1,45 +1,40 @@
 import json
 import os
+import logging
 import boto3
+from botocore.exceptions import ClientError
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ['TABLE_NAME'])
 
-def lambda_handler(event, context):
 
-    id = event.get('pathParameters', {}).get('id')
-
-    if not id:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'message': 'Path parameter id is required'})
-        }
-
-    response = table.get_item(
-        Key={
-            'id': id
-        }
-    )
-
-    item = response.get('Item')
-
-    if not item:
-        return {
-            'statusCode': 404,
-            'body': json.dumps({
-                "message": "Item not found"
-            })
-        }
-    
-    table.delete_item(
-        Key={
-            'id': id
-        }
-    )
-
+def build_response(status_code, body, request_id):
+    body['request_id'] = request_id
     return {
-        'statusCode': 200,
-        'body': json.dumps({
-            "message": "Item deleted successfully"
-        })
+        'statusCode': status_code,
+        'body': json.dumps(body)
     }
+
+
+def lambda_handler(event, context):
+    request_id = context.aws_request_id
+
+    note_id = event.get('pathParameters', {}).get('id')
+    if not note_id:
+        return build_response(400, {'message': 'Path parameter id is required'}, request_id)
+
+    try:
+        result = table.get_item(Key={'id': note_id})
+        if not result.get('Item'):
+            return build_response(404, {'message': 'Item not found'}, request_id)
+
+        table.delete_item(Key={'id': note_id})
+    except ClientError as e:
+        logger.error(json.dumps({'action': 'delete', 'error': str(e), 'request_id': request_id}))
+        return build_response(500, {'message': 'Internal server error'}, request_id)
+
+    logger.info(json.dumps({'action': 'delete', 'id': note_id, 'request_id': request_id}))
+    return build_response(200, {'message': 'Item deleted successfully'}, request_id)
