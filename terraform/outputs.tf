@@ -7,3 +7,13 @@ output "github_actions_role_arn" {
   value       = aws_iam_role.github_actions_role.arn
   description = "Use this ARN as AWS_ROLE_ARN secret in GitHub"
 }
+
+output "cognito_user_pool_id" {
+  value       = aws_cognito_user_pool.notes_user_pool.id
+  description = "Cognito User Pool ID for user management"
+}
+
+output "cognito_client_id" {
+  value       = aws_cognito_user_pool_client.notes_user_pool_client.id
+  description = "Cognito Client ID for authentication requests"
+}
