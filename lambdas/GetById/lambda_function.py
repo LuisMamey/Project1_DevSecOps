@@ -24,6 +24,7 @@ def lambda_handler(event, context):
 
     note_id = event.get('pathParameters', {}).get('id')
     if not note_id:
+        logger.warning(json.dumps({'action': 'getbyid', 'error': 'Path parameter id is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Path parameter id is required'}, request_id)
 
     try:
@@ -34,6 +35,7 @@ def lambda_handler(event, context):
 
     item = result.get('Item')
     if not item:
+        logger.warning(json.dumps({'action': 'getbyid', 'error': 'Item not found', 'id': note_id, 'request_id': request_id}))
         return build_response(404, {'message': 'Item not found'}, request_id)
 
     logger.info(json.dumps({'action': 'getbyid', 'id': note_id, 'request_id': request_id}))
