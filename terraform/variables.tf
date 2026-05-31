@@ -56,3 +56,14 @@ variable "region" {
     error_message = "Region must be one of the supported AWS regions."
   }
 }
+
+variable "github_repo" {
+  type        = string
+  description = "GitHub repository in format owner/repo"
+  default     = "LuisMamey/Project1_DevSecOps"
+
+  validation {
+    condition     = can(regex("^[\\w.-]+/[\\w.-]+$", var.github_repo))
+    error_message = "Must be in format owner/repo."
+  }
+}
