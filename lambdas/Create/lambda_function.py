@@ -27,18 +27,22 @@ def lambda_handler(event, context):
 
     request = event.get('body')
     if not request:
+        logger.warning(json.dumps({'action': 'create', 'error': 'Request body is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Request body is required'}, request_id)
 
     try:
         body = json.loads(request)
     except json.JSONDecodeError:
+        logger.warning(json.dumps({'action': 'create', 'error': 'Invalid JSON in request body', 'request_id': request_id}))
         return build_response(400, {'message': 'Invalid JSON in request body'}, request_id)
 
     name = body.get('name')
     if not name:
+        logger.warning(json.dumps({'action': 'create', 'error': 'Name is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Name is required'}, request_id)
 
     if len(name) > MAX_NAME_LENGTH:
+        logger.warning(json.dumps({'action': 'create', 'error': f'Name cannot exceed {MAX_NAME_LENGTH} characters', 'request_id': request_id}))
         return build_response(400, {'message': f'Name cannot exceed {MAX_NAME_LENGTH} characters'}, request_id)
 
     note_id = str(uuid.uuid4())

@@ -26,27 +26,33 @@ def lambda_handler(event, context):
 
     request = event.get('body')
     if not request:
+        logger.warning(json.dumps({'action': 'update', 'error': 'Request body is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Request body is required'}, request_id)
 
     try:
         body = json.loads(request)
     except json.JSONDecodeError:
+        logger.warning(json.dumps({'action': 'update', 'error': 'Invalid JSON in request body', 'request_id': request_id}))
         return build_response(400, {'message': 'Invalid JSON in request body'}, request_id)
 
     note_id = event.get('pathParameters', {}).get('id')
     if not note_id:
+        logger.warning(json.dumps({'action': 'update', 'error': 'Path parameter id is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Path parameter id is required'}, request_id)
 
     name = body.get('name')
     if not name:
+        logger.warning(json.dumps({'action': 'update', 'error': 'Field name is required', 'request_id': request_id}))
         return build_response(400, {'message': 'Field name is required'}, request_id)
 
     if len(name) > MAX_NAME_LENGTH:
+        logger.warning(json.dumps({'action': 'update', 'error': f'Name cannot exceed {MAX_NAME_LENGTH} characters', 'request_id': request_id}))
         return build_response(400, {'message': f'Name cannot exceed {MAX_NAME_LENGTH} characters'}, request_id)
 
     try:
         result = table.get_item(Key={'id': note_id})
         if not result.get('Item'):
+            logger.warning(json.dumps({'action': 'update', 'error': 'Item not found', 'id': note_id, 'request_id': request_id}))
             return build_response(404, {'message': 'Item not found'}, request_id)
 
         table.update_item(

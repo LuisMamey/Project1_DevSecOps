@@ -27,8 +27,10 @@ def lambda_handler(event, context):
     try:
         limit = int(params.get('limit', 10))
         if limit < 1 or limit > 100:
+            logger.warning(json.dumps({'action': 'getall', 'error': 'Limit must be between 1 and 100', 'request_id': request_id}))
             return build_response(400, {'message': 'Limit must be between 1 and 100'}, request_id)
     except (ValueError, TypeError):
+        logger.warning(json.dumps({'action': 'getall', 'error': 'Limit must be an integer', 'request_id': request_id}))
         return build_response(400, {'message': 'Limit must be an integer'}, request_id)
 
     last_key = params.get('last_key')
