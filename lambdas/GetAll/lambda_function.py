@@ -46,7 +46,8 @@ def lambda_handler(event, context):
         return build_response(500, {'message': 'Internal server error'}, request_id)
 
     items = result['Items']
-    next_key = result.get('LastEvaluatedKey', {}).get('id')
+    last_evaluated_key = result.get('LastEvaluatedKey') or {}
+    next_key = last_evaluated_key.get('id')
 
     logger.info(json.dumps({'action': 'getall', 'count': len(items), 'request_id': request_id}))
     return build_response(200, {'count': len(items), 'data': items, 'next_key': next_key}, request_id)
