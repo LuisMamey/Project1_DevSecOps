@@ -1,9 +1,7 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_wafv2_web_acl" "notes_waf" {
   name        = "${local.name_prefix}-waf"
   description = "WAF for Notes API"
-  scope       = "REGIONAL"
+  scope       = "CLOUDFRONT"
 
   default_action {
     allow {}
@@ -126,9 +124,4 @@ resource "aws_wafv2_web_acl" "notes_waf" {
   }
 
   tags = local.common_tags
-}
-
-resource "aws_wafv2_web_acl_association" "notes_waf_association" {
-  resource_arn = "arn:aws:apigateway:${var.region}:${data.aws_caller_identity.current.account_id}:/apis/${aws_apigatewayv2_api.notes_api.id}/stages/${aws_apigatewayv2_stage.notes_api_stage.name}"
-  web_acl_arn  = aws_wafv2_web_acl.notes_waf.arn
 }
