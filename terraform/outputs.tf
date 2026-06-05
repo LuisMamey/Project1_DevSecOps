@@ -17,3 +17,8 @@ output "cognito_client_id" {
   value       = aws_cognito_user_pool_client.notes_user_pool_client.id
   description = "Cognito Client ID for authentication requests"
 }
+
+output "cloudfront_url" {
+  value       = "https://${aws_cloudfront_distribution.notes_api.domain_name}"
+  description = "CloudFront URL for the Notes API"
+}
