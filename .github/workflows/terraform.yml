@@ -69,6 +69,13 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
         run: terraform validate
 
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ env.WORKING_DIR }}
+          framework: terraform
+          skip_check: CKV_AWS_116,CKV_AWS_272,CKV_AWS_115,CKV_AWS_45,CKV2_AWS_16,CKV_AWS_86,CKV_AWS_87,CKV_AWS_310
+
       - name: Terraform Plan
         if: github.event_name == 'pull_request'
         working-directory: ${{ env.WORKING_DIR }}
