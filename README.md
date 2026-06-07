@@ -8,7 +8,7 @@ A serverless notes API built to demonstrate DevSecOps best practices across deve
 
 ## Architecture
 
-> Diagram coming soon — will be added to `docs/architecture.png`
+![Architecture Diagram](docs/architecture.png)
 
 ---
 
