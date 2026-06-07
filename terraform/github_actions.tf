@@ -106,6 +106,16 @@ resource "aws_iam_policy" "github_actions_policy" {
         ]
       },
       {
+        Sid    = "CloudWatchLogsList"
+        Effect = "Allow"
+        Action = [
+          "logs:DescribeLogGroups",
+          "logs:ListTagsLogGroup",
+          "logs:ListTagsForResource"
+        ]
+        Resource = "*"
+      },
+      {
         Sid      = "Cognito"
         Effect   = "Allow"
         Action   = ["cognito-idp:*"]
