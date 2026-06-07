@@ -132,6 +132,18 @@ resource "aws_iam_policy" "github_actions_policy" {
         Effect   = "Allow"
         Action   = ["cloudfront:*"]
         Resource = "*"
+      },
+      {
+        Sid      = "SNS"
+        Effect   = "Allow"
+        Action   = ["sns:*"]
+        Resource = "arn:aws:sns:${var.region}:${data.aws_caller_identity.current.account_id}:${local.name_prefix}-*"
+      },
+      {
+        Sid      = "CloudWatchAlarms"
+        Effect   = "Allow"
+        Action   = ["cloudwatch:*"]
+        Resource = "*"
       }
     ]
   })

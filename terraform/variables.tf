@@ -67,3 +67,8 @@ variable "github_repo" {
     error_message = "Must be in format owner/repo."
   }
 }
+
+variable "alert_email" {
+  type        = string
+  description = "Email address for CloudWatch alarm notifications"
+}
