@@ -80,7 +80,7 @@ jobs:
         if: github.event_name == 'pull_request'
         working-directory: ${{ env.WORKING_DIR }}
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -out=tfplan
 
       - name: Post Plan as PR Comment
         if: github.event_name == 'pull_request'
@@ -94,6 +94,14 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+
+      - name: Upload Terraform Plan
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: ${{ env.WORKING_DIR }}/tfplan
+          retention-days: 30
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
