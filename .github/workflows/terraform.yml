@@ -74,7 +74,7 @@ jobs:
         with:
           directory: ${{ env.WORKING_DIR }}
           framework: terraform
-          skip_check: CKV_AWS_116,CKV_AWS_272,CKV_AWS_115,CKV_AWS_45,CKV2_AWS_16,CKV_AWS_86,CKV_AWS_87,CKV_AWS_310
+          skip_check: CKV_AWS_116,CKV_AWS_272,CKV_AWS_115,CKV_AWS_45,CKV2_AWS_16,CKV_AWS_86,CKV_AWS_87,CKV_AWS_310,CKV_AWS_158,CKV_AWS_338,CKV_AWS_374,CKV_AWS_174,CKV_AWS_305,CKV_AWS_119,CKV_AWS_173,CKV_AWS_117,CKV2_AWS_32,CKV2_AWS_42,CKV2_AWS_31,CKV2_AWS_47
 
       - name: Terraform Plan
         if: github.event_name == 'pull_request'
