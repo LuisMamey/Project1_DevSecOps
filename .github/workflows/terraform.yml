@@ -45,6 +45,7 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
     needs: tests
+    if: github.actor != 'dependabot[bot]'
 
     steps:
       - name: Checkout
