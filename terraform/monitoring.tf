@@ -20,7 +20,14 @@ resource "aws_kms_key" "sns" {
         Principal = { Service = "cloudwatch.amazonaws.com" }
         Action    = ["kms:GenerateDataKey*", "kms:Decrypt"]
         Resource  = "*"
-      }
+      },
+      {
+        Sid       = "AllowGitHubActionsAdmin"
+        Effect    = "Allow"
+        Principal = { AWS = aws_iam_role.github_actions_role.arn }
+        Action    = "kms:*"
+        Resource  = "*"
+        }
     ]
   })
 }
