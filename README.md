@@ -23,8 +23,11 @@ A serverless notes API built to demonstrate DevSecOps best practices across deve
 | Auth | AWS Cognito | JWT authentication |
 | Security | AWS WAF v2 | Traffic filtering and rate limiting |
 | CDN | AWS CloudFront | WAF integration and edge delivery |
-| CI/CD | GitHub Actions + OIDC | Automated deployment |
-| Observability | CloudWatch Logs + X-Ray | Logging and tracing |
+| CI/CD | GitHub Actions + OIDC | Automated deployment with Checkov and Dependabot |
+| Observability | CloudWatch Logs + Alarms + X-Ray | Logging, tracing, and alerting |
+| Notifications | AWS SNS | CloudWatch alarm email delivery |
+| Encryption | AWS KMS | SNS topic encryption with customer managed key |
+| Cost | AWS Budgets | Monthly spend alerting |
 | State | S3 | Remote Terraform state |
 
 ---
@@ -63,6 +66,7 @@ Set the following variables in your GitHub repository (Settings → Secrets and 
 | `TF_VAR_ENVIRONMENT` | `dev` |
 | `TF_VAR_REGION` | `us-east-1` |
 | `TF_VAR_GITHUB_REPO` | `LuisMamey/Project1_DevSecOps` |
+| `TF_VAR_ALERT_EMAIL` | `your@email.com` |
 
 ### 3. Bootstrap — OIDC and IAM role
 
@@ -92,8 +96,9 @@ Add it as a secret in GitHub (Settings → Secrets and variables → Actions):
 ### 4. Deploy via pipeline
 
 Open a pull request to `master`. The pipeline will:
-1. Run unit tests
-2. Run `terraform plan` and post the output as a PR comment
+1. Run unit tests with coverage (minimum 80%)
+2. Run Checkov static security analysis on Terraform
+3. Run `terraform plan`, post the output as a PR comment, and upload the plan as a downloadable artifact
 
 Merge to `master` to trigger `terraform apply`.
 
